@@ -1,0 +1,554 @@
+-- DROP SCHEMA public;
+
+CREATE SCHEMA public AUTHORIZATION postgres;
+
+COMMENT ON SCHEMA public IS 'standard public schema';
+-- public.agent definition
+
+-- Drop table
+
+-- DROP TABLE public.agent;
+
+CREATE TABLE public.agent (
+	agent_id int8 NOT NULL,
+	agent_name varchar(50) NOT NULL,
+	legal_address varchar(1000) NOT NULL,
+	inn varchar(20) NOT NULL,
+	kpp varchar(20) NOT NULL,
+	manager_fio varchar(100) NOT NULL,
+	phone varchar(20) NOT NULL,
+	email varchar(100) NOT NULL,
+	logo varchar(100) NULL,
+	priority int4 NOT NULL,
+	agent_type_id int8 NOT NULL,
+	CONSTRAINT agent_pk PRIMARY KEY (agent_id)
+);
+
+-- Permissions
+
+ALTER TABLE public.agent OWNER TO user15;
+GRANT ALL ON TABLE public.agent TO user15;
+
+
+-- public.agenttype definition
+
+-- Drop table
+
+-- DROP TABLE public.agenttype;
+
+CREATE TABLE public.agenttype (
+	agenttypeid int8 NOT NULL,
+	agenttypename varchar(200) NOT NULL,
+	CONSTRAINT agenttype_pk PRIMARY KEY (agenttypeid)
+);
+
+-- Permissions
+
+ALTER TABLE public.agenttype OWNER TO user15;
+GRANT ALL ON TABLE public.agenttype TO user15;
+
+
+-- public.unittype definition
+
+-- Drop table
+
+-- DROP TABLE public.unittype;
+
+CREATE TABLE public.unittype (
+	unit_type_id int8 NOT NULL,
+	unit_type_name varchar(20) NOT NULL,
+	CONSTRAINT unittype_pk PRIMARY KEY (unit_type_id)
+);
+
+-- Permissions
+
+ALTER TABLE public.unittype OWNER TO user15;
+GRANT ALL ON TABLE public.unittype TO user15;
+
+
+-- public.materialtype definition
+
+-- Drop table
+
+-- DROP TABLE public.materialtype;
+
+CREATE TABLE public.materialtype (
+	material_type_id int8 NOT NULL,
+	material_type_name varchar(200) NOT NULL,
+	CONSTRAINT materialtype_pk PRIMARY KEY (material_type_id)
+);
+
+-- Permissions
+
+ALTER TABLE public.materialtype OWNER TO user15;
+GRANT ALL ON TABLE public.materialtype TO user15;
+
+
+-- public.suppliertype definition
+
+-- Drop table
+
+-- DROP TABLE public.suppliertype;
+
+CREATE TABLE public.suppliertype (
+	supplier_type_id int8 NOT NULL,
+	supplier_type_name varchar(200) NOT NULL,
+	CONSTRAINT suppliertype_pk PRIMARY KEY (supplier_type_id)
+);
+
+-- Permissions
+
+ALTER TABLE public.suppliertype OWNER TO user15;
+GRANT ALL ON TABLE public.suppliertype TO user15;
+
+
+-- public.operationtype definition
+
+-- Drop table
+
+-- DROP TABLE public.operationtype;
+
+CREATE TABLE public.operationtype (
+	operation_type_id int8 NOT NULL,
+	operation_type_name varchar(200) NOT NULL,
+	CONSTRAINT operationtype_pk PRIMARY KEY (operation_type_id)
+);
+
+-- Permissions
+
+ALTER TABLE public.operationtype OWNER TO user15;
+GRANT ALL ON TABLE public.operationtype TO user15;
+
+
+-- public.priorityhistory definition
+
+-- Drop table
+
+-- DROP TABLE public.priorityhistory;
+
+CREATE TABLE public.priorityhistory (
+	priority_history_id int8 NOT NULL,
+	agent int8 NOT NULL,
+	priority int4 NOT NULL,
+	"date" date NOT NULL,
+	CONSTRAINT priorityhistory_pk PRIMARY KEY (priority_history_id)
+);
+
+-- Permissions
+
+ALTER TABLE public.priorityhistory OWNER TO user15;
+GRANT ALL ON TABLE public.priorityhistory TO user15;
+
+
+-- public.producttype definition
+
+-- Drop table
+
+-- DROP TABLE public.producttype;
+
+CREATE TABLE public.producttype (
+	product_type_id int8 NOT NULL,
+	product_type_name varchar(200) NOT NULL,
+	CONSTRAINT producttype_pk PRIMARY KEY (product_type_id)
+);
+
+-- Permissions
+
+ALTER TABLE public.producttype OWNER TO user15;
+GRANT ALL ON TABLE public.producttype TO user15;
+
+
+-- public.door definition
+
+-- Drop table
+
+-- DROP TABLE public.door;
+
+CREATE TABLE public.door (
+	door_id int8 NOT NULL,
+	door_place varchar(200) NOT NULL,
+	CONSTRAINT door_pk PRIMARY KEY (door_id)
+);
+
+-- Permissions
+
+ALTER TABLE public.door OWNER TO user15;
+GRANT ALL ON TABLE public.door TO user15;
+
+
+-- public.speciality definition
+
+-- Drop table
+
+-- DROP TABLE public.speciality;
+
+CREATE TABLE public.speciality (
+	speciality_id int8 NOT NULL,
+	speciality_name varchar(100) NOT NULL,
+	CONSTRAINT speciality_pk PRIMARY KEY (speciality_id)
+);
+
+-- Permissions
+
+ALTER TABLE public.speciality OWNER TO user15;
+GRANT ALL ON TABLE public.speciality TO user15;
+
+
+-- public.workshop definition
+
+-- Drop table
+
+-- DROP TABLE public.workshop;
+
+CREATE TABLE public.workshop (
+	workshop_id int8 NOT NULL,
+	workshop_name varchar(100) NOT NULL,
+	CONSTRAINT workshop_pk PRIMARY KEY (workshop_id)
+);
+
+-- Permissions
+
+ALTER TABLE public.workshop OWNER TO user15;
+GRANT ALL ON TABLE public.workshop TO user15;
+
+
+-- public.agentpoint8 definition
+
+-- Drop table
+
+-- DROP TABLE public.agentpoint8;
+
+CREATE TABLE public.agentpoint8 (
+	point8_id int8 NOT NULL,
+	point8_name varchar(1000) NOT NULL,
+	address varchar(1000) NOT NULL,
+	agent_id int8 NOT NULL,
+	CONSTRAINT agentpoint8_pk PRIMARY KEY (point8_id),
+	CONSTRAINT agentpoint8_fk FOREIGN KEY (agent_id) REFERENCES public.agent(agent_id)
+);
+
+-- Permissions
+
+ALTER TABLE public.agentpoint8 OWNER TO user15;
+GRANT ALL ON TABLE public.agentpoint8 TO user15;
+
+
+-- public.material definition
+
+-- Drop table
+
+-- DROP TABLE public.material;
+
+CREATE TABLE public.material (
+	material_id int8 NOT NULL,
+	material_name varchar(100) NOT NULL,
+	count_in_pack varchar(20) NOT NULL,
+	unit_type_id int8 NOT NULL,
+	minimal_count int8 NOT NULL,
+	description varchar(1000) NULL,
+	image varchar(50) NULL,
+	price varchar(20) NOT NULL,
+	material_type_id int8 NOT NULL,
+	CONSTRAINT material_pk PRIMARY KEY (material_id),
+	CONSTRAINT material_fk FOREIGN KEY (material_type_id) REFERENCES public.materialtype(material_type_id),
+	CONSTRAINT material_fk_1 FOREIGN KEY (unit_type_id) REFERENCES public.unittype(unit_type_id)
+);
+
+-- Permissions
+
+ALTER TABLE public.material OWNER TO user15;
+GRANT ALL ON TABLE public.material TO user15;
+
+
+-- public.supplier definition
+
+-- Drop table
+
+-- DROP TABLE public.supplier;
+
+CREATE TABLE public.supplier (
+	supplier_id int8 NOT NULL,
+	supplier_name varchar(100) NOT NULL,
+	inn varchar(50) NOT NULL,
+	supplier_type_id int8 NOT NULL,
+	CONSTRAINT supplier_pk PRIMARY KEY (supplier_id),
+	CONSTRAINT supplier_fk FOREIGN KEY (supplier_type_id) REFERENCES public.suppliertype(supplier_type_id)
+);
+
+-- Permissions
+
+ALTER TABLE public.supplier OWNER TO user15;
+GRANT ALL ON TABLE public.supplier TO user15;
+
+
+-- public.materialwarehouse definition
+
+-- Drop table
+
+-- DROP TABLE public.materialwarehouse;
+
+CREATE TABLE public.materialwarehouse (
+	material_warehouse_id int8 NOT NULL,
+	material_id int8 NOT NULL,
+	operation_type_id int8 NOT NULL,
+	operation_date date NOT NULL,
+	count int8 NOT NULL,
+	CONSTRAINT materialwarehouse_pk PRIMARY KEY (material_warehouse_id),
+	CONSTRAINT materialwarehouse_fk FOREIGN KEY (material_id) REFERENCES public.material(material_id),
+	CONSTRAINT materialwarehouse_fk_1 FOREIGN KEY (operation_type_id) REFERENCES public.operationtype(operation_type_id)
+);
+
+-- Permissions
+
+ALTER TABLE public.materialwarehouse OWNER TO user15;
+GRANT ALL ON TABLE public.materialwarehouse TO user15;
+
+
+-- public."Order" definition
+
+-- Drop table
+
+-- DROP TABLE public."Order";
+
+CREATE TABLE public."Order" (
+	order_id int8 NOT NULL,
+	date_of_formation date NOT NULL,
+	date_of_prepayment date NULL,
+	is_active varchar(20) NULL,
+	date_of_payment date NULL,
+	agent_id int8 NOT NULL,
+	sell_date date NULL,
+	CONSTRAINT order_pk PRIMARY KEY (order_id),
+	CONSTRAINT order_fk FOREIGN KEY (agent_id) REFERENCES public.agent(agent_id)
+);
+
+-- Permissions
+
+ALTER TABLE public."Order" OWNER TO user15;
+GRANT ALL ON TABLE public."Order" TO user15;
+
+
+-- public.product definition
+
+-- Drop table
+
+-- DROP TABLE public.product;
+
+CREATE TABLE public.product (
+	product_id int8 NOT NULL,
+	artikul varchar(200) NOT NULL,
+	product_name varchar(200) NOT NULL,
+	description varchar(1000) NULL,
+	image varchar(200) NULL,
+	width varchar(30) NULL,
+	height varchar(30) NULL,
+	length varchar(30) NULL,
+	netto varchar(30) NULL,
+	brutto varchar(30) NULL,
+	certificate varchar(200) NULL,
+	standart_num varchar(200) NULL,
+	people_count int8 NOT NULL,
+	production_time int8 NULL,
+	minimal_price varchar(30) NOT NULL,
+	workshop_id int8 NOT NULL,
+	product_type_id int8 NOT NULL,
+	CONSTRAINT product_pk PRIMARY KEY (product_id),
+	CONSTRAINT product_fk FOREIGN KEY (workshop_id) REFERENCES public.workshop(workshop_id),
+	CONSTRAINT product_fk_1 FOREIGN KEY (product_type_id) REFERENCES public.producttype(product_type_id)
+);
+
+-- Permissions
+
+ALTER TABLE public.product OWNER TO user15;
+GRANT ALL ON TABLE public.product TO user15;
+
+
+-- public.sellhistory definition
+
+-- Drop table
+
+-- DROP TABLE public.sellhistory;
+
+CREATE TABLE public.sellhistory (
+	sell_history_id varchar NOT NULL,
+	agent_id int8 NOT NULL,
+	product_id int8 NOT NULL,
+	"date" date NOT NULL,
+	count int8 NOT NULL,
+	CONSTRAINT sellhistory_pk PRIMARY KEY (sell_history_id),
+	CONSTRAINT sellhistory_fk FOREIGN KEY (agent_id) REFERENCES public.agent(agent_id),
+	CONSTRAINT sellhistory_fk_1 FOREIGN KEY (product_id) REFERENCES public.product(product_id)
+);
+
+-- Permissions
+
+ALTER TABLE public.sellhistory OWNER TO user15;
+GRANT ALL ON TABLE public.sellhistory TO user15;
+
+
+-- public.worker definition
+
+-- Drop table
+
+-- DROP TABLE public.worker;
+
+CREATE TABLE public.worker (
+	worker_id int8 NOT NULL,
+	last_name varchar(50) NOT NULL,
+	first_name varchar(50) NOT NULL,
+	middle_name varchar(50) NULL,
+	gender varchar(10) NOT NULL,
+	passport_series varchar(10) NOT NULL,
+	passport_number varchar(10) NOT NULL,
+	passport_info varchar(1000) NOT NULL,
+	bank_account varchar(1000) NULL,
+	family_info varchar(1000) NOT NULL,
+	healthy_info varchar(1000) NOT NULL,
+	speciality_id int8 NOT NULL,
+	CONSTRAINT worker_pk PRIMARY KEY (worker_id),
+	CONSTRAINT worker_fk FOREIGN KEY (speciality_id) REFERENCES public.speciality(speciality_id)
+);
+
+-- Permissions
+
+ALTER TABLE public.worker OWNER TO user15;
+GRANT ALL ON TABLE public.worker TO user15;
+
+
+-- public.workerworkshop definition
+
+-- Drop table
+
+-- DROP TABLE public.workerworkshop;
+
+CREATE TABLE public.workerworkshop (
+	worker_workshop_id int8 NOT NULL,
+	worker_id int8 NOT NULL,
+	workshop_id int8 NOT NULL,
+	work_shift int8 NOT NULL,
+	CONSTRAINT workerworkshop_fk FOREIGN KEY (worker_id) REFERENCES public.worker(worker_id),
+	CONSTRAINT workerworkshop_fk_1 FOREIGN KEY (workshop_id) REFERENCES public.workshop(workshop_id)
+);
+
+-- Permissions
+
+ALTER TABLE public.workerworkshop OWNER TO user15;
+GRANT ALL ON TABLE public.workerworkshop TO user15;
+
+
+-- public.materialsupplier definition
+
+-- Drop table
+
+-- DROP TABLE public.materialsupplier;
+
+CREATE TABLE public.materialsupplier (
+	material_supplier_id int8 NOT NULL,
+	material_id int8 NOT NULL,
+	supplier_id int8 NOT NULL,
+	quality int8 NOT NULL,
+	delivery_date date NOT NULL,
+	count int8 NOT NULL,
+	CONSTRAINT materialsupplier_pk PRIMARY KEY (material_supplier_id),
+	CONSTRAINT materialsupplier_fk FOREIGN KEY (material_id) REFERENCES public.material(material_id),
+	CONSTRAINT materialsupplier_fk_1 FOREIGN KEY (supplier_id) REFERENCES public.supplier(supplier_id)
+);
+
+-- Permissions
+
+ALTER TABLE public.materialsupplier OWNER TO user15;
+GRANT ALL ON TABLE public.materialsupplier TO user15;
+
+
+-- public.orderproduct definition
+
+-- Drop table
+
+-- DROP TABLE public.orderproduct;
+
+CREATE TABLE public.orderproduct (
+	order_product_id int8 NOT NULL,
+	order_id int8 NOT NULL,
+	product_id int8 NOT NULL,
+	count int8 NOT NULL,
+	CONSTRAINT orderproduct_pk PRIMARY KEY (order_product_id),
+	CONSTRAINT orderproduct_fk FOREIGN KEY (order_id) REFERENCES public."Order"(order_id),
+	CONSTRAINT orderproduct_fk_1 FOREIGN KEY (product_id) REFERENCES public.product(product_id)
+);
+
+-- Permissions
+
+ALTER TABLE public.orderproduct OWNER TO user15;
+GRANT ALL ON TABLE public.orderproduct TO user15;
+
+
+-- public.pricehistory definition
+
+-- Drop table
+
+-- DROP TABLE public.pricehistory;
+
+CREATE TABLE public.pricehistory (
+	price_history_id int8 NOT NULL,
+	product_id int8 NOT NULL,
+	minimal_price varchar(30) NOT NULL,
+	acceptance_date date NOT NULL,
+	CONSTRAINT pricehistory_pk PRIMARY KEY (price_history_id),
+	CONSTRAINT pricehistory_fk FOREIGN KEY (product_id) REFERENCES public.product(product_id)
+);
+
+-- Permissions
+
+ALTER TABLE public.pricehistory OWNER TO user15;
+GRANT ALL ON TABLE public.pricehistory TO user15;
+
+
+-- public.productmaterials definition
+
+-- Drop table
+
+-- DROP TABLE public.productmaterials;
+
+CREATE TABLE public.productmaterials (
+	product_material_id int8 NOT NULL,
+	product_id int8 NOT NULL,
+	material_id int8 NOT NULL,
+	count int8 NOT NULL,
+	CONSTRAINT productmaterials_pk PRIMARY KEY (product_material_id),
+	CONSTRAINT productmaterials_fk FOREIGN KEY (material_id) REFERENCES public.material(material_id),
+	CONSTRAINT productmaterials_fk_1 FOREIGN KEY (product_id) REFERENCES public.product(product_id)
+);
+
+-- Permissions
+
+ALTER TABLE public.productmaterials OWNER TO user15;
+GRANT ALL ON TABLE public.productmaterials TO user15;
+
+
+-- public.workerdoor definition
+
+-- Drop table
+
+-- DROP TABLE public.workerdoor;
+
+CREATE TABLE public.workerdoor (
+	worker_door_id int8 NOT NULL,
+	door_id int8 NULL,
+	worker_id int8 NULL,
+	date_time date NOT NULL,
+	CONSTRAINT workerdoor_fk FOREIGN KEY (door_id) REFERENCES public.door(door_id),
+	CONSTRAINT workerdoor_fk_1 FOREIGN KEY (worker_id) REFERENCES public.worker(worker_id)
+);
+
+-- Permissions
+
+ALTER TABLE public.workerdoor OWNER TO user15;
+GRANT ALL ON TABLE public.workerdoor TO user15;
+
+
+
+
+-- Permissions
+
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO public;
